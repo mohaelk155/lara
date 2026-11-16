@@ -88,6 +88,12 @@ final class laramgr: ObservableObject {
     @Published var rcready: Bool = false
     @Published var rcfailed: Bool = false
     @Published var showrespring: Bool = false
+
+    // AC CAPTURE (Free Fire)
+    @Published var acRunning: Bool = false
+    @Published var acDone: Bool = false
+    @Published var acStatus: String = ""
+    @Published var acHits: Int = 0
     
     @Published var showLogs: Bool = false
     
@@ -165,6 +171,28 @@ final class laramgr: ObservableObject {
         DispatchQueue.main.async {
             self.log += message + "\n"
             globallogger.log(message)
+        }
+    }
+    
+    // MARK: - AC CAPTURE (Free Fire)
+    func acCapture() {
+        guard !acRunning else { return }
+        acRunning = true
+        acDone = false
+        acHits = 0
+        acStatus = "buscando FreeFire..."
+        logmsg("[ACCAP] inicio captura")
+        DispatchQueue.global(qos: .userInitiated).async {
+            let rc = ac_capture_firefire()
+            let status = String(cString: ac_capture_status())
+            let hits = Int(ac_capture_found())
+            DispatchQueue.main.async {
+                self.acRunning = false
+                self.acDone = true
+                self.acHits = hits
+                self.acStatus = status
+                self.logmsg("[ACCAP] rc=\(rc) hits=\(hits) — \(status)")
+            }
         }
     }
     

@@ -28,6 +28,7 @@ struct ContentView: View {
                 AlertsSection
                 KRWSection
                 RCSection
+                ACCaptureSection
                 ActionsSection
                 DebugSection
                 InlineLogsSection
@@ -254,6 +255,34 @@ struct ContentView: View {
                 .font(.footnote)
             }
             #endif
+        }
+    }
+
+    // MARK: - AC CAPTURE (Free Fire)
+    private var ACCaptureSection: some View {
+        Section {
+            LabeledContent(content: {
+                Text(mgr.acStatus == "" ? "—" : mgr.acStatus)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .lineLimit(3)
+            }) {
+                Button("Capture Free Fire", action: {
+                    mgr.acCapture()
+                })
+                .disabled(!mgr.dsready || mgr.acRunning)
+            }
+            if mgr.acDone {
+                LabeledContent("Hits", value: "\(mgr.acHits)")
+                Text("Salida: /var/mobile/ac_capture.jsonl")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+            }
+        } header: {
+            HeaderLabel(text: "AC Capture", icon: "target")
+        } footer: {
+            Text("Lee la memoria del proceso de Free Fire (App Store) con el kernel r/w + VM remota de lara. Abre el juego y entra en partida antes de pulsar. El resultado va a /var/mobile/ac_capture.jsonl.")
+                .font(.footnote)
         }
     }
     
