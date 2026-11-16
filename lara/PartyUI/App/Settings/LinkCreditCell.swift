@@ -57,6 +57,7 @@ public struct LinkCreditIcon: View {
     }
     
     public var body: some View {
+        #if compiler(>=6.2) && canImport(SwiftUI)
         if #available(iOS 19.0, *) {
             AsyncImage(url: URL(string: url)) { image in
                 image
@@ -71,6 +72,7 @@ public struct LinkCreditIcon: View {
                     .frame(width: 40, height: 40)
             }
         } else {
+        #endif
             AsyncImage(url: URL(string: url)) { image in
                 image
                     .resizable()
@@ -86,6 +88,8 @@ public struct LinkCreditIcon: View {
                 ProgressView()
                     .frame(width: 40, height: 40)
             }
+        #if compiler(>=6.2) && canImport(SwiftUI)
         }
+        #endif
     }
 }

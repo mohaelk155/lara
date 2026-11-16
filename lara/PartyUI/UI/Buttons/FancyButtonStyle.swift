@@ -20,6 +20,7 @@ public struct FancyButtonStyle: PrimitiveButtonStyle {
     }
     
     public func makeBody(configuration: Configuration) -> some View {
+        #if compiler(>=6.2) && canImport(SwiftUI)
         if #available(iOS 19.0, *) {
             configuration.label
                 .buttonStyle(.plain)
@@ -29,6 +30,7 @@ public struct FancyButtonStyle: PrimitiveButtonStyle {
                 .glassEffect(.regular.interactive().tint(isEnabled ? color.opacity(0.2) : Color(.systemGray).opacity(0.2)), in: AnyShape(shape))
                 .onTapGesture(perform: configuration.trigger)
         } else {
+        #endif
             configuration.label
                 .buttonStyle(.plain)
                 .foregroundStyle(isEnabled ? color : .gray)
@@ -39,7 +41,9 @@ public struct FancyButtonStyle: PrimitiveButtonStyle {
                 .brightness(0.1)
                 .onTapGesture(perform: configuration.trigger)
                 .modifier(FadeAnimation())
+        #if compiler(>=6.2) && canImport(SwiftUI)
         }
+        #endif
     }
     
 }

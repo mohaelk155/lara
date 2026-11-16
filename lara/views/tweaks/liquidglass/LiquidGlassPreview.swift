@@ -79,10 +79,12 @@ struct ActionBG: ViewModifier {
                     .clipShape(.capsule)
             }
         } else {
+            #if compiler(>=6.2) && canImport(SwiftUI)
             if #available(iOS 19.0, *) {
                 content
                     .glassEffect(.clear.interactive(), in: .capsule)
             }
+            #endif
         }
     }
 }
@@ -103,10 +105,12 @@ struct NotificationBG: ViewModifier {
                     .clipShape(.rect(cornerRadius: 26))
             }
         } else {
+            #if compiler(>=6.2) && canImport(SwiftUI)
             if #available(iOS 19.0, *) {
                 content
                     .glassEffect(.clear, in: .rect(cornerRadius: 26))
             }
+            #endif
         }
     }
 }

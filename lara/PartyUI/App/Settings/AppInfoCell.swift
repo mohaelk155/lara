@@ -32,6 +32,7 @@ public struct AppIcon: View {
     }
     
     public var body: some View {
+        #if compiler(>=6.2) && canImport(SwiftUI)
         if #available(iOS 19.0, *) {
             image
                 .resizable()
@@ -41,6 +42,7 @@ public struct AppIcon: View {
                 .clipShape(.rect(cornerRadius: 18))
                 .glassEffect(.regular, in: .rect(cornerRadius: 18))
         } else {
+        #endif
             image
                 .resizable()
                 .scaledToFit()
@@ -51,6 +53,8 @@ public struct AppIcon: View {
                     RoundedRectangle(cornerRadius: 14)
                         .stroke(Color.primary.opacity(0.2), lineWidth: 2)
                 }
+        #if compiler(>=6.2) && canImport(SwiftUI)
         }
+        #endif
     }
 }
