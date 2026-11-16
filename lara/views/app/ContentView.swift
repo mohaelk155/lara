@@ -273,7 +273,7 @@ struct ContentView: View {
                 .disabled(!mgr.dsready || mgr.acRunning)
             }
             if mgr.acDone {
-                LabeledContent("Hits", value: "\(mgr.acHits)")
+                LabeledContent("Candidatos", value: "\(mgr.acHits)")
                 Text("Salida: /var/mobile/ac_capture.jsonl")
                     .font(.footnote)
                     .foregroundColor(.secondary)
@@ -281,7 +281,7 @@ struct ContentView: View {
         } header: {
             HeaderLabel(text: "AC Capture", icon: "target")
         } footer: {
-            Text("Lee la memoria del proceso de Free Fire (App Store) con el kernel r/w + VM remota de lara. Abre el juego y entra en partida antes de pulsar. El resultado va a /var/mobile/ac_capture.jsonl.")
+            Text("v3: recorre el heap de Free Fire buscando bloques de bytes con ALTA ENTROPIA (cifrados, 400-2000 B), no base64. Abre el juego y entra en partida antes de pulsar. Resultado en /var/mobile/ac_capture.jsonl (kind=entropy).")
                 .font(.footnote)
         }
     }
