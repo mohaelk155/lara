@@ -268,21 +268,26 @@ struct ContentView: View {
                     .foregroundColor(.secondary)
                     .lineLimit(3)
             }) {
-                Button("Capture AppAttest", action: {
-                    mgr.aaCapture()
-                })
-                .disabled(!mgr.dsready || mgr.aaRunning)
+                VStack(alignment: .leading, spacing: 6) {
+                    Button("Capture AppAttest (RemoteCall)", action: {
+                        mgr.aaCapture()
+                    })
+                    Button("Scan AppAttest (memoria)", action: {
+                        mgr.aaScan()
+                    })
+                }
             }
+            .disabled(!mgr.dsready || mgr.aaRunning)
             if mgr.aaDone {
                 LabeledContent("Items", value: "\(mgr.aaHits)")
-                Text("Salida: /var/mobile/appattest.json")
+                Text("Salida: appattest.json / appattest_scan.jsonl")
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
         } header: {
             HeaderLabel(text: "App Attest", icon: "checkmark.shield")
         } footer: {
-            Text("Llama a DCAppAttestService DENTRO de FreeFire (RemoteCall) y guarda keyId + attestation + assertion del juego LIMPIO. Abre el juego antes de pulsar.")
+            Text("RemoteCall llama a DCAppAttestService (puede fallar si los hilos no responden). El Scan barre la memoria buscando keyId (UUID), selectores y assertion (base64). Abre el juego antes de pulsar.")
                 .font(.footnote)
         }
     }

@@ -202,6 +202,28 @@ final class laramgr: ObservableObject {
         }
     }
 
+    // MARK: - APP ATTEST SCAN (sin RemoteCall, por memoria)
+    func aaScan() {
+        guard !aaRunning else { return }
+        aaRunning = true
+        aaDone = false
+        aaHits = 0
+        aaStatus = "barriendo memoria de FreeFire..."
+        logmsg("[AASCAN] inicio")
+        DispatchQueue.global(qos: .userInitiated).async {
+            let rc = aa_scan()
+            let st = String(cString: aa_scan_status())
+            let n = Int(aa_scan_found())
+            DispatchQueue.main.async {
+                self.aaRunning = false
+                self.aaDone = true
+                self.aaHits = n
+                self.aaStatus = st
+                self.logmsg("[AASCAN] rc=\(rc) hits=\(n) — \(st)")
+            }
+        }
+    }
+
     // MARK: - AC CAPTURE (Free Fire)
     func acCapture() {
         guard !acRunning else { return }
