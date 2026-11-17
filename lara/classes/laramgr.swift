@@ -94,6 +94,12 @@ final class laramgr: ObservableObject {
     @Published var acDone: Bool = false
     @Published var acStatus: String = ""
     @Published var acHits: Int = 0
+
+    // APP ATTEST (Free Fire)
+    @Published var aaRunning: Bool = false
+    @Published var aaDone: Bool = false
+    @Published var aaStatus: String = ""
+    @Published var aaHits: Int = 0
     
     @Published var showLogs: Bool = false
     
@@ -174,6 +180,28 @@ final class laramgr: ObservableObject {
         }
     }
     
+    // MARK: - APP ATTEST (Free Fire limpio)
+    func aaCapture() {
+        guard !aaRunning else { return }
+        aaRunning = true
+        aaDone = false
+        aaHits = 0
+        aaStatus = "conectando con FreeFire..."
+        logmsg("[APPATTEST] inicio")
+        DispatchQueue.global(qos: .userInitiated).async {
+            let rc = aa_capture()
+            let st = String(cString: aa_status())
+            let n = Int(aa_found())
+            DispatchQueue.main.async {
+                self.aaRunning = false
+                self.aaDone = true
+                self.aaHits = n
+                self.aaStatus = st
+                self.logmsg("[APPATTEST] rc=\(rc) items=\(n) — \(st)")
+            }
+        }
+    }
+
     // MARK: - AC CAPTURE (Free Fire)
     func acCapture() {
         guard !acRunning else { return }

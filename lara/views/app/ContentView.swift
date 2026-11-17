@@ -29,6 +29,7 @@ struct ContentView: View {
                 KRWSection
                 RCSection
                 ACCaptureSection
+                AppAttestSection
                 ActionsSection
                 DebugSection
                 InlineLogsSection
@@ -255,6 +256,34 @@ struct ContentView: View {
                 .font(.footnote)
             }
             #endif
+        }
+    }
+
+    // MARK: - APP ATTEST (Free Fire)
+    private var AppAttestSection: some View {
+        Section {
+            LabeledContent(content: {
+                Text(mgr.aaStatus == "" ? "—" : mgr.aaStatus)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .lineLimit(3)
+            }) {
+                Button("Capture AppAttest", action: {
+                    mgr.aaCapture()
+                })
+                .disabled(!mgr.dsready || mgr.aaRunning)
+            }
+            if mgr.aaDone {
+                LabeledContent("Items", value: "\(mgr.aaHits)")
+                Text("Salida: /var/mobile/appattest.json")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+            }
+        } header: {
+            HeaderLabel(text: "App Attest", icon: "checkmark.shield")
+        } footer: {
+            Text("Llama a DCAppAttestService DENTRO de FreeFire (RemoteCall) y guarda keyId + attestation + assertion del juego LIMPIO. Abre el juego antes de pulsar.")
+                .font(.footnote)
         }
     }
 

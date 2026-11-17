@@ -21,6 +21,7 @@
 #import "ota.h"
 #import "screentime.h"
 #import "acapture.h"
+#import "appattest.h"
 
 #import <zlib.h>
 
