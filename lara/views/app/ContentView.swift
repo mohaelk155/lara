@@ -262,22 +262,20 @@ struct ContentView: View {
     // MARK: - APP ATTEST (Free Fire)
     private var AppAttestSection: some View {
         Section {
-            LabeledContent(content: {
-                Text(mgr.aaStatus == "" ? "—" : mgr.aaStatus)
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .lineLimit(3)
-            }) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Button("Capture AppAttest (RemoteCall)", action: {
-                        mgr.aaCapture()
-                    })
-                    Button("Scan AppAttest (memoria)", action: {
-                        mgr.aaScan()
-                    })
-                }
-            }
-            .disabled(!mgr.dsready || mgr.aaRunning)
+            // Boton 1: RemoteCall (el que falla por los hilos de Unity)
+            LabeledContent("RemoteCall", content: {
+                Button("Capture", action: { mgr.aaCapture() })
+                    .disabled(!mgr.dsready || mgr.aaRunning)
+            })
+            // Boton 2: SCAN de memoria (independiente, no comparte flag)
+            LabeledContent("Scan memoria", content: {
+                Button("Scan", action: { mgr.aaScan() })
+                    .disabled(!mgr.dsready || mgr.aaScanRunning)
+            })
+            Text(mgr.aaStatus == "" ? "—" : mgr.aaStatus)
+                .font(.footnote)
+                .foregroundColor(.secondary)
+                .lineLimit(4)
             if mgr.aaDone {
                 LabeledContent("Items", value: "\(mgr.aaHits)")
                 Text("Salida: appattest.json / appattest_scan.jsonl")
@@ -287,7 +285,7 @@ struct ContentView: View {
         } header: {
             HeaderLabel(text: "App Attest", icon: "checkmark.shield")
         } footer: {
-            Text("RemoteCall llama a DCAppAttestService (puede fallar si los hilos no responden). El Scan barre la memoria buscando keyId (UUID), selectores y assertion (base64). Abre el juego antes de pulsar.")
+            Text("Capture AppAttest = llama a DCAppAttestService via RemoteCall. Scan = barre la memoria buscando keyId (UUID), selectores y assertion (base64). Abre el juego antes de pulsar. Usa Scan si Capture falla.")
                 .font(.footnote)
         }
     }

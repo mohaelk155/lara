@@ -97,6 +97,7 @@ final class laramgr: ObservableObject {
 
     // APP ATTEST (Free Fire)
     @Published var aaRunning: Bool = false
+    @Published var aaScanRunning: Bool = false
     @Published var aaDone: Bool = false
     @Published var aaStatus: String = ""
     @Published var aaHits: Int = 0
@@ -204,8 +205,8 @@ final class laramgr: ObservableObject {
 
     // MARK: - APP ATTEST SCAN (sin RemoteCall, por memoria)
     func aaScan() {
-        guard !aaRunning else { return }
-        aaRunning = true
+        guard !aaScanRunning else { return }
+        aaScanRunning = true
         aaDone = false
         aaHits = 0
         aaStatus = "barriendo memoria de FreeFire..."
@@ -215,7 +216,7 @@ final class laramgr: ObservableObject {
             let st = String(cString: aa_scan_status())
             let n = Int(aa_scan_found())
             DispatchQueue.main.async {
-                self.aaRunning = false
+                self.aaScanRunning = false
                 self.aaDone = true
                 self.aaHits = n
                 self.aaStatus = st
